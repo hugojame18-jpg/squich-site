@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Squich — Kits Slime Mart, squishies et calendrier de l'Avent</title>
+  <meta name="description" content="Kits Slime Mart à 9,99 € : fabrique ta pizza, tes brioches ou ton gâteau en slime. Squishies à 9,99 €, calendrier de l'Avent, livraison offerte en 3 jours." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='54' r='38' fill='%23E0457B'/><path d='M50 18c6-10 18-12 24-8-4 8-14 12-24 8z' fill='%2389B87A'/></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css?v=202611201358" />
+</head>
+<body>
+
+  <div class="announce">
+    <div class="container announce-inner">
+      <a href="#slimemart" class="announce-cta">Nouveau : les kits Slime Mart à 9,99 €</a>
+      <span class="sep"></span>
+      <a href="#avent" class="announce-cta">Calendrier de l'Avent <span data-cal-price></span></a>
+      <span class="sep"></span>
+      <span>Livraison offerte en 3 jours</span>
+    </div>
+  </div>
+
+  <header class="header" id="header">
+    <div class="container header-inner">
+      <button class="icon-btn burger" id="burger" aria-label="Menu">
+        <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+
+      <nav class="nav" id="nav">
+        <a href="#slimemart" class="nav-hl">Slime Mart</a>
+        <a href="#avent">Calendrier de l'Avent</a>
+        <a href="#boutique">Squishies</a>
+        <a href="#packs">Packs</a>
+      </nav>
+
+      <a href="#top" class="logo" aria-label="Squich, accueil">Squich</a>
+
+      <div class="header-actions">
+        <div class="search" id="search">
+          <button class="icon-btn" id="searchBtn" aria-label="Rechercher">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          </button>
+          <div class="search-panel" id="searchPanel">
+            <input type="search" id="searchInput" placeholder="Rechercher un squishy" autocomplete="off" aria-label="Rechercher un squishy" />
+            <div class="search-results" id="searchResults"></div>
+          </div>
+        </div>
+        <button class="icon-btn" id="wishBtn" aria-label="Favoris">
+          <svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-9.2-9A5 5 0 0 1 12 6a5 5 0 0 1 9.2 5C19 15.6 12 20 12 20z"/></svg>
+          <span class="bubble" id="wishCount">0</span>
+        </button>
+        <button class="icon-btn" id="cartBtn" aria-label="Panier">
+          <svg viewBox="0 0 24 24"><path d="M5 8h14l-1.1 11.1a2 2 0 0 1-2 1.9H8.1a2 2 0 0 1-2-1.9L5 8z"/><path d="M9 8V7a3 3 0 0 1 6 0v1"/></svg>
+          <span class="bubble" id="cartCount">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <!-- HERO : SLIME MART -->
+    <section class="sm-hero" id="hero">
+      <div class="container sm-hero-inner">
+        <div class="sm-copy">
+          <span class="sm-badge">Nouveau chez Squich</span>
+          <h1>Fabrique ton <span class="sm-drip">slime</span> gourmand</h1>
+          <p class="lead">Burger, pizza, poulet croustillant, gaufres, gâteau à la fraise… avec les kits Slime Mart, tu crées de la nourriture en slime plus vraie que nature… puis tu la pétris.</p>
+          <div class="sm-price"><b>9,99 €</b>le kit<small>9 kits au choix · livraison offerte</small></div>
+          <div class="hero-cta">
+            <a href="#slimemart" class="btn btn-dark">Choisir mon kit</a>
+            <a href="#avent" class="btn btn-outline">Calendrier de l'Avent</a>
+          </div>
+          <ul class="hero-proof">
+            <li><b>Livraison offerte</b> en 3 jours</li>
+            <li><b>Dès 6 ans</b></li>
+            <li><b>Idée cadeau</b> de Noël</li>
+          </ul>
+        </div>
+        <div class="sm-visual" id="smHeroGrid"></div>
+      </div>
+      <div class="gingham" aria-hidden="true"></div>
+    </section>
+
+    <!-- RÉASSURANCE (barre sous le hero) -->
+    <section class="trustbar">
+      <div class="container perks">
+        <div class="perk">
+          <svg viewBox="0 0 24 24"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="1.8"/><circle cx="17" cy="18" r="1.8"/></svg>
+          <div><b>Livraison offerte</b><span>Reçu en 3 jours</span></div>
+        </div>
+        <div class="perk">
+          <svg viewBox="0 0 24 24"><path d="M12 3 4 6v6c0 4.5 3.4 8 8 9 4.6-1 8-4.5 8-9V6z"/><path d="m9 12 2 2 4-4"/></svg>
+          <div><b>Certifié EN71</b><span>Matières sans danger</span></div>
+        </div>
+        <div class="perk">
+          <svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4v4h4"/></svg>
+          <div><b>Retours 30 jours</b><span>Satisfait ou remboursé</span></div>
+        </div>
+        <div class="perk">
+          <svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+          <div><b>Paiement sécurisé</b><span>CB, PayPal, Apple Pay</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIME MART -->
+    <section class="section section-slime" id="slimemart">
+      <div class="container">
+        <div class="section-head split">
+          <div>
+            <span class="kicker">Les kits Slime Mart</span>
+            <h2>Choisis ton kit</h2>
+          </div>
+          <a href="#boutique" class="link-arrow" data-filter-cat="slimemart">Voir les kits</a>
+        </div>
+        <div class="slime-grid" id="slimeGrid"></div>
+        <p class="slime-note"><b>9,99 € le kit</b>, un kit par commande. Kits à fabriquer, dès 6 ans, ne se mangent pas. Livraison offerte en 3 jours.</p>
+      </div>
+    </section>
+
+    <!-- ENTREPÔT -->
+    <section class="section section-tight" id="entrepot">
+      <div class="container warehouse">
+        <figure class="warehouse-photo">
+          <img src="images/entrepot.jpg" alt="Notre entrepôt : étagères remplies de squishies, de slimes et de peluches" loading="lazy" width="1448" height="1086" style="width:100%;height:auto" />
+        </figure>
+        <div class="warehouse-copy">
+          <span class="kicker">Les coulisses</span>
+          <h2>Tout part de notre entrepôt</h2>
+          <p>Squishies, slimes, kits Slime Mart : tout est en stock ici, rangé étagère par étagère. Chaque commande est préparée à la main puis expédiée, livraison offerte en 3 jours.</p>
+          <ul class="checks checks-dark">
+            <li>Produits en stock, prêts à partir</li>
+            <li>Commandes préparées à la main</li>
+            <li>Livraison offerte en 3 jours</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- AUSSI CHEZ SQUISHLAND -->
+    <section class="section section-tight offers-section" id="aussi">
+      <div class="container">
+        <div class="section-head"><h2>Aussi chez Squich</h2></div>
+        <div class="offers offers-2">
+          <a href="#avent" class="offer offer-cal">
+            <span class="offer-visual offer-24"><span>24</span></span>
+            <span class="offer-copy"><span class="kicker">Édition Noël</span><b>Calendrier de l'Avent</b><small>24 squishies surprise</small><span class="offer-price"><span data-cal-price></span></span></span>
+          </a>
+          <a href="#boutique" class="offer">
+            <span class="offer-visual"><img src="images/raisin-perles.jpg" alt="Squishies" loading="lazy" /></span>
+            <span class="offer-copy"><span class="kicker">Squishies</span><b><span data-squish-count></span> modèles à écraser</b><small>Tous les modèles au même prix · livraison offerte</small><span class="offer-price">9,99 €</span></span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CALENDRIER DE L'AVENT -->
+    <section class="xmas" id="avent">
+      <div class="container xmas-inner">
+        <div class="xmas-copy">
+          <span class="kicker">Édition Noël 2026</span>
+          <h2 class="xmas-title">Le calendrier de l'Avent Squishy</h2>
+          <p class="lead">24 cases, 24 squishies surprise. Du 1<sup>er</sup> au 24 décembre, une nouvelle texture à écraser chaque matin.</p>
+          <div class="xmas-price">
+            <span class="price-xl" data-cal-price></span>
+            <span class="xmas-unit">soit <b id="calUnit"></b> le squishy</span>
+          </div>
+          <div class="hero-cta">
+            <a href="shipping.html?produit=calendrier" class="btn btn-gold" data-cal-buy>Commander le calendrier</a>
+            <a href="#calendrier" class="btn btn-ghost-light">Comment ça marche</a>
+          </div>
+          <p class="xmas-countdown" id="xmasCountdown"></p>
+          <p class="xmas-deadline" id="heroDeadline" hidden></p>
+          <ul class="hero-proof">
+            <li><b>Livraison offerte</b> en 3 jours</li>
+            <li><b>Certifié EN71</b></li>
+            <li><b>Idée cadeau</b> dès 3 ans</li>
+          </ul>
+        </div>
+        <div class="advent-box xmas-box">
+          <div class="xmas-ribbon">Joyeux Noël</div>
+          <div class="advent-grid" id="adventGrid"></div>
+          <small>Ouvre une case pour voir un exemple de surprise</small>
+        </div>
+      </div>
+    </section>
+
+    <!-- BEST-SELLERS -->
+    <section class="section" id="best-sellers">
+      <div class="container">
+        <div class="section-head split">
+          <div>
+            <span class="kicker">Best-sellers</span>
+            <h2>Les préférés de la communauté</h2>
+          </div>
+          <a href="#boutique" class="link-arrow">Voir toute la boutique</a>
+        </div>
+        <div class="grid" id="bestGrid"></div>
+      </div>
+    </section>
+
+    <!-- PACKS -->
+    <section class="section section-tight packs-section" id="packs">
+      <div class="container">
+        <div class="section-head center">
+          <span class="kicker">Packs</span>
+          <h2>Compose ton pack</h2>
+          <p>Mélange les modèles comme tu veux, jusqu'à 9 par commande. Le prix du pack s'applique automatiquement au panier.</p>
+        </div>
+        <div class="packs" id="packGrid"></div>
+      </div>
+    </section>
+
+    <!-- BOUTIQUE -->
+    <section class="section section-shop" id="boutique">
+      <div class="container">
+        <div class="section-head split">
+          <div>
+            <span class="kicker">Boutique</span>
+            <h2>La boutique</h2>
+          </div>
+          <label class="sort">
+            <span>Trier</span>
+            <select id="sortSelect" aria-label="Trier">
+              <option value="featured">Sélection</option>
+              <option value="new">Nouveautés</option>
+              <option value="rating">Mieux notés</option>
+              <option value="rise">Remontée la plus lente</option>
+            </select>
+          </label>
+        </div>
+        <div class="tabs" id="chips" role="tablist"></div>
+        <p class="results" id="resultsCount"></p>
+        <div class="grid" id="productGrid"></div>
+        <div class="more"><button class="btn btn-outline" id="moreBtn">Afficher plus</button></div>
+        <div class="empty" id="emptyState" hidden>
+          <h3>Aucun squishy ne correspond</h3>
+          <p>Essaie un autre univers ou une autre recherche.</p>
+          <button class="btn btn-dark" id="emptyReset">Voir tous les squishies</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- CALENDRIER : COMMENT ÇA MARCHE -->
+    <section class="section section-soft" id="calendrier">
+      <div class="container">
+        <div class="section-head center">
+          <span class="kicker">Calendrier de l'Avent</span>
+          <h2>Comment ça marche</h2>
+          <p>Un squishy surprise par jour, du 1<sup>er</sup> au 24 décembre.</p>
+        </div>
+        <ol class="steps">
+          <li><span class="step-n">1</span><b>Tu commandes</b><p id="stepDeadline">Livré en 3 jours, livraison offerte.</p></li>
+          <li><span class="step-n">2</span><b>Le 1<sup>er</sup> décembre</b><p>Tu ouvres la première case et découvres ton premier squishy.</p></li>
+          <li><span class="step-n">3</span><b>Jusqu'au 24 décembre</b><p>Une nouvelle surprise chaque matin : perles, gel, slow rising, gourmandises…</p></li>
+        </ol>
+        <div class="inside">
+          <div class="inside-copy">
+            <h3>Ce qui peut se cacher derrière les cases</h3>
+            <p>Les 24 squishies restent une surprise. Pour te donner une idée, voici quelques textures de la boutique.</p>
+          </div>
+          <div class="inside-grid" id="insideGrid"></div>
+        </div>
+        <div class="cal-cta">
+          <div><span class="price-xl" data-cal-price></span><small>24 squishies · commande séparée du panier</small></div>
+          <a href="shipping.html?produit=calendrier" class="btn btn-dark" data-cal-buy>Commander le calendrier</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- AVIS -->
+    <section class="section section-soft" id="avis">
+      <div class="container">
+        <div class="section-head center">
+          <span class="kicker">Avis</span>
+          <h2>Ils en parlent mieux que nous</h2>
+        </div>
+        <div class="reviews" id="reviewGrid"></div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section" id="faq">
+      <div class="container faq-wrap">
+        <div class="section-head">
+          <span class="kicker">Aide</span>
+          <h2>Questions fréquentes</h2>
+          <p>Une autre question ? Écris-nous, on répond en moins de 24 h.</p>
+        </div>
+        <div class="faq" id="faqList"></div>
+      </div>
+    </section>
+
+    <!-- NEWSLETTER -->
+    <section class="container" id="newsletter">
+      <div class="newsletter reveal">
+        <h2>Les nouveautés en avant-première</h2>
+        <p>Nouveaux modèles et éditions limitées : sois prévenu avant tout le monde.</p>
+        <form id="nlForm" class="nl-form" novalidate>
+          <input type="email" id="nlEmail" placeholder="Ton adresse email" aria-label="Adresse email" required />
+          <button class="btn btn-dark" type="submit">S'inscrire</button>
+        </form>
+        <p class="nl-success" id="nlSuccess" hidden>Merci, tu es inscrit.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="logo">Squich</span>
+        <p>Des squishies doux et satisfaisants, choisis un par un et expédiés avec soin.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Boutique</h4>
+        <a href="#boutique" data-filter-cat="sensoriel">Sensoriel</a>
+        <a href="#boutique" data-filter-cat="gourmandises">Gourmandises</a>
+        <a href="#boutique" data-filter-cat="fruits">Fruits</a>
+        <a href="#slimemart">Slime Mart</a>
+        <a href="#packs">Packs</a>
+        <a href="#avent">Calendrier de l'Avent</a>
+      </div>
+      <div class="footer-col">
+        <h4>Aide</h4>
+        <a href="#faq">Livraison</a>
+        <a href="#faq">Retours</a>
+        <a href="#faq">Entretien</a>
+        <a href="#faq">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Paiement</h4>
+        <div class="pay"><span>CB</span><span>Visa</span><span>PayPal</span><span>Apple Pay</span></div>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <span>© 2026 Squich · squich.site</span>
+      <span>Mentions légales · CGV · Confidentialité · <a href="#" data-cookie-settings>Gérer les cookies</a></span>
+    </div>
+  </footer>
+
+  <div class="overlay" id="overlay"></div>
+
+  <!-- Panier / favoris -->
+  <aside class="drawer" id="drawer" aria-hidden="true">
+    <div class="drawer-head">
+      <div class="drawer-tabs">
+        <button class="drawer-tab active" data-tab="cart">Panier <span id="drawerCartCount">0</span></button>
+        <button class="drawer-tab" data-tab="wish">Favoris <span id="drawerWishCount">0</span></button>
+      </div>
+      <button class="icon-btn" data-close aria-label="Fermer"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    </div>
+    <div class="pack-note" id="packNote"></div>
+    <div class="drawer-body" id="drawerBody"></div>
+    <div class="drawer-foot" id="drawerFoot">
+      <div class="totals" id="totals"></div>
+      <button class="btn btn-dark w-full" id="checkoutBtn">Passer commande</button>
+      <small class="secure">Paiement sécurisé · Livraison offerte</small>
+    </div>
+  </aside>
+
+  <!-- Fiche produit -->
+  <div class="modal" id="productModal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-card">
+      <button class="icon-btn modal-close" data-close aria-label="Fermer"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+      <div class="pm" id="pmContent"></div>
+    </div>
+  </div>
+
+  <!-- Barre de pack -->
+  <div class="packbar" id="packbar" aria-live="polite">
+    <div class="pb-thumbs" id="pbThumbs"></div>
+    <div class="pb-main">
+      <div class="pb-line"><b id="pbCount"></b><span id="pbPrice"></span></div>
+      <div class="pb-meter" id="pbMeter"></div>
+      <small id="pbHint"></small>
+    </div>
+    <button class="btn btn-light" id="pbGo">Commander</button>
+  </div>
+
+  <!-- Barre calendrier -->
+  <div class="advbar" id="advbar">
+    <span class="advbar-text"><b>Calendrier de l'Avent</b><small>24 squishies surprise</small></span>
+    <span class="advbar-price" data-cal-price></span>
+    <a href="shipping.html?produit=calendrier" class="btn btn-gold" data-cal-buy>Commander</a>
+  </div>
+
+  <div class="toasts" id="toasts"></div>
+
+  <script src="js/consent.js?v=202611201358"></script>
+  <script src="js/data.js?v=202611201358"></script>
+  <script src="js/app.js?v=202611201358"></script>
+</body>
+</html>

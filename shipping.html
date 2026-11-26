@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Livraison — Squich</title>
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #FFFBEA;
+      --bg-2: #FFF1BF;
+      --ink: #2A1033;
+      --ink-2: #5B4A60;
+      --ink-3: #8F7F93;
+      --pink: #E6007E;
+      --pink-2: #C2006A;
+      --pink-soft: #FFE3F1;
+      --line: #F0E4BC;
+      --radius: 20px;
+      --radius-sm: 12px;
+      --font-display: 'Fredoka', system-ui, sans-serif;
+      --font-body: 'Inter', system-ui, sans-serif;
+      --shadow: 0 4px 24px rgba(43,27,61,.08);
+      --shadow-lg: 0 8px 40px rgba(43,27,61,.13);
+    }
+    html { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 16px; -webkit-font-smoothing: antialiased; }
+    body { min-height: 100dvh; }
+    h1,h2,h3,h4 { font-family: var(--font-display); line-height: 1.1; font-weight: 600; }
+    a { color: var(--pink); text-decoration: none; }
+    input, select, button { font: inherit; color: inherit; }
+
+    /* ── Header ── */
+    .sh-header {
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+      padding: 0 24px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .sh-logo {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--ink);
+      letter-spacing: -.02em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .sh-logo span { color: var(--pink); }
+    .sh-logo { color: var(--pink) !important; }
+
+    /* ── Breadcrumb ── */
+    .sh-steps {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--ink-3);
+    }
+    .sh-steps .done { color: var(--pink); font-weight: 700; }
+    .sh-steps .active { color: var(--ink); font-weight: 700; }
+    .sh-steps .sep { opacity: .4; }
+    .st-compact { display: none; }
+
+    /* Sur petit écran le logo + les 3 étapes demandent ~390px : le logo passait
+       sur 2 lignes et chevauchait le fil d'Ariane. On remplace les étapes par un
+       libellé compact. */
+    @media (max-width: 480px) {
+      .sh-header { padding: 0 16px; height: 56px; }
+      .sh-logo { font-size: 18px; white-space: nowrap; }
+      .sh-steps .st, .sh-steps .sep { display: none; }
+      .st-compact { display: inline; font-size: 12px; font-weight: 700; color: var(--ink); white-space: nowrap; }
+    }
+
+    /* ── Layout ── */
+    .sh-main {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 40px 20px 80px;
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 40px;
+      align-items: start;
+    }
+    @media (max-width: 780px) {
+      .sh-main { grid-template-columns: 1fr; padding: 20px 16px 60px; gap: 24px; }
+      .sh-summary { order: -1; }
+    }
+
+    /* ── Form section ── */
+    .sh-form-col h2 {
+      font-size: 26px;
+      margin-bottom: 6px;
+    }
+    .sh-form-col .subtitle {
+      color: var(--ink-2);
+      font-size: 14px;
+      margin-bottom: 28px;
+    }
+
+    /* ── Form grid ── */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    @media (max-width: 500px) {
+      .form-grid { gap: 12px 10px; }
+      .field input, .field select { padding: 12px 13px; font-size: 16px; }
+    }
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .field.full { grid-column: 1 / -1; }
+    .field label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--ink-2);
+      letter-spacing: .02em;
+      text-transform: uppercase;
+    }
+    .field input,
+    .field select {
+      background: #fff;
+      border: 2px solid var(--line);
+      border-radius: var(--radius-sm);
+      padding: 13px 16px;
+      font-size: 15px;
+      transition: border-color .15s, box-shadow .15s;
+      outline: none;
+      width: 100%;
+    }
+    .field input:focus,
+    .field select:focus {
+      border-color: var(--pink);
+      box-shadow: 0 0 0 3px var(--pink-soft);
+    }
+    .field input.error { border-color: #f05; box-shadow: 0 0 0 3px rgba(255,0,85,.12); }
+    .field .err-msg { font-size: 12px; color: #f05; display: none; }
+    .field.has-error .err-msg { display: block; }
+
+    /* ── Phone field ── */
+    .phone-wrap {
+      display: flex;
+      gap: 8px;
+    }
+    .phone-wrap select {
+      width: 130px;
+      flex-shrink: 0;
+      padding: 13px 10px;
+    }
+    .phone-wrap input {
+      flex: 1;
+    }
+
+    /* ── Country select with flag ── */
+    .field select option { font-size: 14px; }
+
+    /* ── Submit ── */
+    .sh-submit {
+      margin-top: 28px;
+    }
+    .btn-submit {
+      width: 100%;
+      background: var(--pink);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 18px 24px;
+      font-size: 18px;
+      font-weight: 800;
+      font-family: var(--font-display);
+      cursor: pointer;
+      box-shadow: 0 4px 0 var(--pink-2), var(--shadow);
+      transition: transform .1s, box-shadow .1s;
+      letter-spacing: .01em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .btn-submit:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--pink-2); }
+    .btn-submit:disabled { opacity: .6; cursor: not-allowed; }
+
+    /* ── Trust row ── */
+    .trust-row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 13px;
+      color: var(--ink-2);
+      font-weight: 600;
+    }
+    .trust-item .ic { font-size: 18px; }
+
+    /* ── Réassurance, barre fixe, zoom ── */
+    .reassure { list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 14px; margin: 0 0 12px; padding: 10px 12px; border-radius: 14px; background: #fff; border: 2px solid #FFE135; font-size: 12.5px; font-weight: 700; color: var(--ink); }
+    .reassure li { display: flex; align-items: center; gap: 5px; white-space: nowrap; }
+    .summary-img { cursor: zoom-in; }
+    .sticky-buy { display: none; }
+    @media (max-width: 780px) {
+      .sticky-buy { display: flex; align-items: center; gap: 12px; position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: #fff; box-shadow: 0 -10px 30px -12px rgba(42,16,51,.35); transform: translateY(110%); transition: transform .25s; }
+      .sticky-buy.show { transform: none; }
+      .sb-total { display: flex; flex-direction: column; line-height: 1.15; }
+      .sb-total small { font-size: 11px; color: var(--ink-2); font-weight: 600; }
+      .sb-total b { font-size: 19px; }
+      .sb-btn { flex: 1; height: 50px; border: 0; border-radius: 999px; background: #E6007E; color: #fff; font: 700 16px Fredoka, Inter, sans-serif; cursor: pointer; }
+      .summary-img, .summary-img-placeholder { width: 88px !important; height: 88px !important; }
+    }
+    .zoom { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; padding: 20px; background: rgba(20,8,24,.85); }
+    .zoom[hidden] { display: none; }
+    .zoom img { max-width: 100%; max-height: 85vh; border-radius: 16px; background: #fff; }
+    .zoom button { position: absolute; top: 16px; right: 16px; width: 44px; height: 44px; border-radius: 50%; border: 0; background: #fff; font-size: 18px; cursor: pointer; }
+
+    /* ── Summary card ── */
+    .sh-summary {
+      position: sticky;
+      top: 80px;
+    }
+    .summary-card {
+      background: #fff;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+    }
+    .summary-product {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 20px;
+      border-bottom: 1px solid var(--line);
+    }
+    .summary-img {
+      width: 80px;
+      height: 80px;
+      border-radius: var(--radius-sm);
+      object-fit: cover;
+      background: var(--bg-2);
+      flex-shrink: 0;
+    }
+    .summary-img-placeholder {
+      width: 80px;
+      height: 80px;
+      border-radius: var(--radius-sm);
+      background: var(--bg-2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      flex-shrink: 0;
+    }
+    .summary-product-info { flex: 1; }
+    .summary-product-name { font-weight: 800; font-size: 15px; margin-bottom: 4px; }
+    .summary-product-sub { font-size: 13px; color: var(--ink-2); }
+    .summary-product-price { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--pink); white-space: nowrap; }
+
+    .summary-lines { padding: 16px 20px; }
+    .summary-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      padding: 6px 0;
+      color: var(--ink-2);
+    }
+    .summary-line.total {
+      font-weight: 800;
+      font-size: 17px;
+      color: var(--ink);
+      border-top: 1px solid var(--line);
+      margin-top: 8px;
+      padding-top: 14px;
+    }
+    .badge-free {
+      background: #d4f5e2;
+      color: #16a34a;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    .summary-delivery {
+      background: var(--bg-2);
+      margin: 0 20px 20px;
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .summary-delivery .ic { font-size: 22px; }
+
+    /* ── Empty cart ── */
+    .empty-cart {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--ink-2);
+    }
+    .empty-cart .em { font-size: 48px; margin-bottom: 12px; }
+
+    /* ── Secure badges ── */
+    .secure-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--ink-3);
+      margin-top: 12px;
+      font-weight: 600;
+    }
+
+    /* ── Annonce du partenaire de paiement ── */
+    .pay-note {
+      display: flex; gap: 10px; align-items: flex-start;
+      margin-top: 22px; padding: 14px 16px; border-radius: var(--radius-sm);
+      background: var(--bg-2); color: var(--ink-2); font-size: 13.5px; line-height: 1.5;
+    }
+    .pay-note svg { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; fill: none; stroke: var(--ink); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .pay-note b { color: var(--ink); font-weight: 600; }
+    .pay-steps { margin: 6px 0 0; padding-left: 18px; }
+    .pay-steps li { margin: 3px 0; }
+
+    /* ── Écran de transition vers le paiement ── */
+    .redirect {
+      position: fixed; inset: 0; z-index: 1000;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px;
+      padding: 24px; text-align: center; background: var(--bg);
+      opacity: 0; visibility: hidden; transition: opacity .25s, visibility .25s;
+    }
+    .redirect.show { opacity: 1; visibility: visible; }
+    .redirect-logo { font-family: var(--font-display); font-size: 34px; font-weight: 500; color: var(--ink); letter-spacing: -.02em; }
+    .redirect-spin { width: 34px; height: 34px; border-radius: 50%; border: 2.5px solid var(--line); border-top-color: var(--ink); animation: spin .8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .redirect-title { font-size: 17px; font-weight: 600; color: var(--ink); }
+    .redirect-sub { font-size: 14px; color: var(--ink-3); max-width: 320px; }
+    .redirect-link { font-size: 14px; font-weight: 600; color: var(--ink); text-decoration: underline; text-underline-offset: 3px; visibility: hidden; }
+    .redirect-link.show { visibility: visible; }
+    @media (prefers-reduced-motion: reduce) { .redirect-spin { animation-duration: 2s; } }
+
+    /* ── Kits Slime Mart : 2e kit ── */
+    .kit-remove { border: 0; background: none; padding: 0; color: var(--ink-3); font: inherit; font-size: 12.5px; text-decoration: underline; cursor: pointer; }
+    .kit-upsell { margin: 0 20px 4px; padding: 14px; border-radius: var(--radius-sm); background: #FFF1BF; border: 2px dashed #FFD400; }
+    .kit-upsell b { display: block; font-size: 14.5px; color: var(--ink); }
+    .kit-upsell small { display: block; margin-top: 2px; font-size: 12.5px; color: var(--ink-2); }
+    .kit-picks { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 12px; }
+    .kit-pick { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 6px; border-radius: 12px; border: 1.5px solid var(--line); background: #fff; cursor: pointer; font: inherit; }
+    .kit-pick:hover { border-color: var(--pink); }
+    .kit-pick img { width: 100%; aspect-ratio: 1; object-fit: contain; }
+    .kit-pick span { font-size: 11px; font-weight: 600; line-height: 1.2; color: var(--ink); text-align: center; }
+
+    /* ── Mobile ──
+       Ce bloc doit rester en fin de feuille : .sh-summary{position:sticky} est
+       déclaré plus haut avec la même spécificité et l'emporterait autrement.
+       En une colonne le récapitulatif est au-dessus du formulaire, et sticky le
+       faisait passer par-dessus les champs au défilement. */
+    @media (max-width: 780px) {
+      .sh-summary { position: static; top: auto; }
+    }
+    @media (max-width: 480px) {
+      .sh-form-col h2 { font-size: 22px; }
+      .summary-product { padding: 16px; gap: 12px; }
+      .summary-img, .summary-img-placeholder { width: 64px; height: 64px; }
+      .btn-submit { font-size: 16px; padding: 16px 18px; }
+      .trust-row { gap: 10px; }
+      .trust-item { font-size: 12px; }
+      .phone-wrap select { width: 108px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="redirect" id="redirect" role="status" aria-live="polite">
+    <div class="redirect-logo">Squich</div>
+    <div class="redirect-spin" aria-hidden="true"></div>
+    <div class="redirect-title">Redirection vers le paiement sécurisé…</div>
+    <div class="redirect-sub" id="redirectSub">Ta commande est transmise à notre partenaire de paiement sécurisé. L'adresse de la page va changer : c'est normal.</div>
+    <a class="redirect-link" id="redirectLink" href="#">Continuer vers le paiement</a>
+  </div>
+
+  <!-- Header -->
+  <header class="sh-header">
+    <a href="index.html" class="sh-logo">Squich</a>
+    <nav class="sh-steps">
+      <span class="st done">✓ Panier</span>
+      <span class="sep">›</span>
+      <span class="st active">Livraison</span>
+      <span class="sep">›</span>
+      <span class="st">Paiement</span>
+      <span class="st-compact">Étape 2/3 · Livraison</span>
+    </nav>
+  </header>
+
+  <!-- Main -->
+  <main class="sh-main">
+
+    <!-- Form column -->
+    <div class="sh-form-col">
+      <h2>Où livrer ta commande ? 📦</h2>
+      <p class="subtitle">Dernière étape avant le paiement sécurisé. Livraison offerte, chez toi en 3 jours.</p>
+
+      <form id="shipForm" data-clarity-mask="true" novalidate>
+        <div class="form-grid">
+
+          <div class="field" id="f-first">
+            <label for="inp-first">Prénom</label>
+            <input id="inp-first" name="first" type="text" autocomplete="given-name" autocapitalize="words" enterkeyhint="next" placeholder="ex. Marie" required />
+            <span class="err-msg">Champ requis</span>
+          </div>
+
+          <div class="field" id="f-last">
+            <label for="inp-last">Nom</label>
+            <input id="inp-last" name="last" type="text" autocomplete="family-name" autocapitalize="words" enterkeyhint="next" placeholder="ex. Dupont" required />
+            <span class="err-msg">Champ requis</span>
+          </div>
+
+          <div class="field full" id="f-email">
+            <label for="inp-email">Email</label>
+            <input id="inp-email" name="email" type="email" inputmode="email" autocomplete="email" autocapitalize="none" spellcheck="false" enterkeyhint="next" placeholder="ton@email.com" required />
+            <span class="err-msg">Email invalide</span>
+          </div>
+
+          <div class="field full" id="f-phone">
+            <label>Téléphone</label>
+            <div class="phone-wrap">
+              <select id="inp-prefix" aria-label="Indicatif pays"></select>
+              <input id="inp-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel-national" enterkeyhint="next" placeholder="6 12 34 56 78" required />
+            </div>
+            <span class="err-msg">Numéro requis</span>
+          </div>
+
+          <div class="field full" id="f-address">
+            <label for="inp-address">Adresse</label>
+            <input id="inp-address" name="address" type="text" autocomplete="address-line1" enterkeyhint="next" placeholder="12 rue des Squishies" required />
+            <span class="err-msg">Champ requis</span>
+          </div>
+
+          <div class="field" id="f-zip">
+            <label for="inp-zip">Code postal</label>
+            <input id="inp-zip" name="zip" type="text" inputmode="numeric" autocomplete="postal-code" enterkeyhint="next" placeholder="75001" required />
+            <span class="err-msg">Code postal requis</span>
+          </div>
+
+          <div class="field" id="f-city">
+            <label for="inp-city">Ville</label>
+            <input id="inp-city" name="city" type="text" autocomplete="address-level2" autocapitalize="words" enterkeyhint="done" placeholder="Paris" required />
+            <span class="err-msg">Champ requis</span>
+          </div>
+
+          <div class="field full" id="f-country">
+            <label for="inp-country">Pays</label>
+            <select id="inp-country" name="country" autocomplete="country-name" required></select>
+          </div>
+
+        </div>
+
+        <div class="pay-note">
+          <svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+          <div>
+            <b>Ce qui se passe après « Commander »</b>
+            <ol class="pay-steps">
+              <li>Tu es redirigé vers la page sécurisée de <b data-partner>notre partenaire de paiement</b> pour régler ta commande. L'adresse de la page change : c'est normal.</li>
+              <li>Après le paiement, tu reçois une confirmation par email.</li>
+              <li>Ta commande est préparée et livrée en 3 jours, livraison offerte.</li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="sh-submit">
+          <button type="submit" class="btn-submit" id="submitBtn">
+            <span>🔒</span> <span id="submitLabel">Commander</span>
+          </button>
+          <div class="secure-row">🔒 Paiement 100% sécurisé &nbsp;·&nbsp; 🛡️ Données protégées</div>
+        </div>
+
+        <div class="trust-row">
+          <div class="trust-item"><span class="ic">🚚</span>Livraison gratuite en 3 j</div>
+          <div class="trust-item"><span class="ic">↩️</span>Retours faciles</div>
+          <div class="trust-item"><span class="ic">💬</span>Support 7j/7</div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Summary column -->
+    <aside class="sh-summary">
+      <ul class="reassure" aria-label="Nos garanties">
+        <li><span aria-hidden="true">🚚</span>Livraison offerte · 3 jours</li>
+        <li><span aria-hidden="true">🔒</span>Paiement sécurisé</li>
+        <li><span aria-hidden="true">↩️</span>Retours 30 jours</li>
+      </ul>
+      <div class="summary-card" id="summaryCard">
+        <div class="empty-cart"><div class="em">🛒</div>Panier vide</div>
+      </div>
+    </aside>
+
+  </main>
+
+  <div class="sticky-buy" id="stickyBuy" aria-hidden="true">
+    <div class="sb-total"><small>Total · livraison offerte</small><b id="sbPrice"></b></div>
+    <button type="button" class="sb-btn" id="sbBtn" tabindex="-1">🔒 Commander</button>
+  </div>
+
+  <div class="zoom" id="zoom" role="dialog" aria-label="Photo du produit" hidden><img alt="" /><button type="button" aria-label="Fermer">✕</button></div>
+
+  <script src="js/consent.js?v=202611201358"></script>
+  <script src="js/data.js?v=202611201358"></script>
+  <script>
+  (function () {
+    /* ── Countries ── */
+    const COUNTRIES = [
+      { code: 'FR', name: 'France',            flag: '🇫🇷', tel: '+33'  },
+      { code: 'BE', name: 'Belgique',           flag: '🇧🇪', tel: '+32'  },
+      { code: 'CH', name: 'Suisse',             flag: '🇨🇭', tel: '+41'  },
+      { code: 'LU', name: 'Luxembourg',         flag: '🇱🇺', tel: '+352' },
+      { code: 'MC', name: 'Monaco',             flag: '🇲🇨', tel: '+377' },
+      { code: 'CA', name: 'Canada',             flag: '🇨🇦', tel: '+1'   },
+      { code: 'US', name: 'États-Unis',         flag: '🇺🇸', tel: '+1'   },
+      { code: 'GB', name: 'Royaume-Uni',        flag: '🇬🇧', tel: '+44'  },
+      { code: 'DE', name: 'Allemagne',          flag: '🇩🇪', tel: '+49'  },
+      { code: 'ES', name: 'Espagne',            flag: '🇪🇸', tel: '+34'  },
+      { code: 'IT', name: 'Italie',             flag: '🇮🇹', tel: '+39'  },
+      { code: 'NL', name: 'Pays-Bas',           flag: '🇳🇱', tel: '+31'  },
+      { code: 'PT', name: 'Portugal',           flag: '🇵🇹', tel: '+351' },
+      { code: 'AT', name: 'Autriche',           flag: '🇦🇹', tel: '+43'  },
+      { code: 'PL', name: 'Pologne',            flag: '🇵🇱', tel: '+48'  },
+      { code: 'SE', name: 'Suède',              flag: '🇸🇪', tel: '+46'  },
+      { code: 'NO', name: 'Norvège',            flag: '🇳🇴', tel: '+47'  },
+      { code: 'DK', name: 'Danemark',           flag: '🇩🇰', tel: '+45'  },
+      { code: 'FI', name: 'Finlande',           flag: '🇫🇮', tel: '+358' },
+      { code: 'MA', name: 'Maroc',              flag: '🇲🇦', tel: '+212' },
+      { code: 'DZ', name: 'Algérie',            flag: '🇩🇿', tel: '+213' },
+      { code: 'TN', name: 'Tunisie',            flag: '🇹🇳', tel: '+216' },
+      { code: 'SN', name: 'Sénégal',            flag: '🇸🇳', tel: '+221' },
+      { code: 'CI', name: "Côte d'Ivoire",      flag: '🇨🇮', tel: '+225' },
+      { code: 'CM', name: 'Cameroun',           flag: '🇨🇲', tel: '+237' },
+      { code: 'MU', name: 'Maurice',            flag: '🇲🇺', tel: '+230' },
+      { code: 'RE', name: 'Réunion',            flag: '🇷🇪', tel: '+262' },
+      { code: 'GP', name: 'Guadeloupe',         flag: '🇬🇵', tel: '+590' },
+      { code: 'MQ', name: 'Martinique',         flag: '🇲🇶', tel: '+596' },
+      { code: 'GF', name: 'Guyane',             flag: '🇬🇫', tel: '+594' },
+      { code: 'NC', name: 'Nouvelle-Calédonie', flag: '🇳🇨', tel: '+687' },
+      { code: 'PF', name: 'Polynésie fr.',      flag: '🇵🇫', tel: '+689' },
+    ];
+
+    /* ── Populate country select ── */
+    const countrySelect = document.getElementById('inp-country');
+    const prefixSelect  = document.getElementById('inp-prefix');
+
+    COUNTRIES.forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = c.name;
+      opt.textContent = c.flag + '  ' + c.name;
+      opt.dataset.tel = c.tel;
+      opt.dataset.code = c.code;
+      countrySelect.appendChild(opt);
+    });
+
+    COUNTRIES.forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = c.tel;
+      opt.textContent = c.flag + ' ' + c.tel;
+      opt.dataset.code = c.code;
+      prefixSelect.appendChild(opt);
+    });
+
+    /* Auto-detect country from browser */
+    const lang = (navigator.language || 'fr').toUpperCase();
+    const autoCode = lang.split('-')[1] || lang.split('-')[0];
+    /* 90 % des visiteurs sont en France : un iPhone réglé en anglais ne doit pas tomber sur « États-Unis ». */
+    const autoIdx = lang.startsWith('FR') ? COUNTRIES.findIndex(c => c.code === autoCode) : -1;
+    const startIdx = autoIdx >= 0 ? autoIdx : 0;
+    countrySelect.selectedIndex = startIdx;
+    prefixSelect.selectedIndex  = startIdx;
+
+    /* Sync prefix when country changes */
+    countrySelect.addEventListener('change', () => {
+      const sel = COUNTRIES[countrySelect.selectedIndex];
+      if (sel) prefixSelect.value = sel.tel;
+    });
+    /* Sync country when prefix changes */
+    prefixSelect.addEventListener('change', () => {
+      const tel = prefixSelect.value;
+      const idx = COUNTRIES.findIndex(c => c.tel === tel);
+      if (idx >= 0) countrySelect.selectedIndex = idx;
+    });
+
+    /* ── Read cart ── */
+    const byId = Object.fromEntries((typeof PRODUCTS !== 'undefined' ? PRODUCTS : []).map(p => [p.id, p]));
+    let cart = [];
+    try { cart = JSON.parse(localStorage.getItem('squishland:cart') || '[]'); } catch(e) {}
+
+    /* ── Render summary ── */
+    const card = document.getElementById('summaryCard');
+    const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const euro = n => n.toFixed(2).replace('.', ',') + ' €';
+    cart = cart.filter(i => i && byId[i.id]);
+    let count = 0;
+    cart.forEach(i => { i.qty = Math.max(1, i.qty | 0); count += i.qty; });
+    if (count > MAX_ITEMS) { cart = cart.slice(0, 1); cart.forEach(i => { i.qty = Math.min(i.qty, MAX_ITEMS); }); count = cart.reduce((s, i) => s + i.qty, 0); }
+    /* Commandes à part du panier : le calendrier et les kits Slime Mart (?produit=…) */
+    const param = new URLSearchParams(location.search).get('produit');
+    const trackKind = param || 'panier';
+    const isSolo = !!param;
+    let solo = null;
+    if (param === 'calendrier') {
+      solo = { name: CALENDAR.name, price: CALENDAR.price, url: CALENDAR.soldOut ? '' : CALENDAR.url, sub: `${CALENDAR.doors} cases · Qté 1`, thumb: '<div class="summary-img-placeholder">🎄</div>', empty: CALENDAR.soldOut ? 'Calendrier en rupture de stock' : 'Calendrier bientôt disponible' };
+    }
+    const kitIds = (param || '').split(',').filter(Boolean);
+    /* Ancien lien « 2 kits » : on garde seulement le premier kit (un kit par commande). */
+    if (kitIds.length > SLIME_MAX && kitIds.every(id => byId[id] && byId[id].standalone)) { location.replace('shipping.html?produit=' + kitIds.slice(0, SLIME_MAX).join(',')); return; }
+    const isKits = !solo && kitIds.length >= 1 && kitIds.length <= SLIME_MAX && kitIds.every(id => byId[id] && byId[id].standalone);
+    if (isKits) {
+      const order = SLIME_ORDERS[kitIds.length];
+      const kits = kitIds.map(id => byId[id]);
+      const goto = ids => { location.replace('shipping.html?produit=' + ids.join(',')); };
+      card.innerHTML = kits.map((k, i) => `
+        <div class="summary-product">
+          <img class="summary-img" src="images/${k.id}.jpg" alt="${esc(k.name)}" />
+          <div class="summary-product-info">
+            <div class="summary-product-name">${esc(k.name)}</div>
+            <div class="summary-product-sub">${k.pieces} pièces${kits.length > 1 ? ` · <button type="button" class="kit-remove" data-i="${i}">Retirer</button>` : ''}</div>
+          </div>
+          <div class="summary-product-price">${euro(k.price)}</div>
+        </div>`).join('') + (kits.length < SLIME_MAX && SLIME_ORDERS[kits.length + 1] ? `
+        <div class="kit-upsell">
+          <b>Ajoute un 2<sup>e</sup> kit : les 2 pour ${euro(SLIME_ORDERS[kits.length + 1].price)}</b>
+          <small>2 kits maximum par commande, identiques ou différents</small>
+          <div class="kit-picks">${PRODUCTS.filter(p => p.standalone).map(p => `
+            <button type="button" class="kit-pick" data-id="${p.id}" title="${esc(p.name)}"><img src="images/${p.id}.jpg" alt="${esc(p.name)}" /><span>+ ${esc(p.name.replace('Slime Mart ', '').split(' ')[0])}</span></button>`).join('')}
+          </div>
+        </div>` : '') + `
+        <div class="summary-lines">
+          <div class="summary-line"><span>Sous-total (${kits.length} kit${kits.length > 1 ? 's' : ''})</span><span>${euro(order.price)}</span></div>
+          <div class="summary-line"><span>Livraison</span><span><span class="badge-free">Offerte</span></span></div>
+          <div class="summary-line total"><span>Total</span><span>${euro(order.price)}</span></div>
+        </div>
+        <div class="summary-delivery">
+          <span class="ic">🚚</span>
+          <div><b>Livraison standard</b><br/><span style="font-weight:400;color:var(--ink-2)">Livré en 3 jours — Gratuit</span></div>
+        </div>`;
+      card.addEventListener('click', e => {
+        const add = e.target.closest('.kit-pick');
+        if (add) { window.track && window.track('kit_ajoute_livraison', { produit: add.dataset.id }); goto(kitIds.concat(add.dataset.id)); return; }
+        const rm = e.target.closest('.kit-remove');
+        if (rm) goto(kitIds.filter((_, i) => i !== +rm.dataset.i));
+      });
+      solo = { price: order.price, url: order.url, ready: true, photo: 'images/' + kits[0].id + '.jpg', title: kits.map(k => k.name).join(' + ') };
+    }
+    let pack = null;
+    if (isSolo) {
+      if (solo && solo.ready) {
+        pack = { price: solo.price, url: solo.url, photo: solo.photo, title: solo.title || solo.name };
+        document.getElementById('submitLabel').textContent = `Commander · ${euro(solo.price)}`;
+      } else if (solo && solo.url) {
+        pack = { price: solo.price, url: solo.url, photo: solo.photo, title: solo.title || solo.name };
+        card.innerHTML = `
+        <div class="summary-product">
+          ${solo.thumb}
+          <div class="summary-product-info">
+            <div class="summary-product-name">${esc(solo.name)}</div>
+            <div class="summary-product-sub">${solo.sub}</div>
+          </div>
+          <div class="summary-product-price">${euro(solo.price)}</div>
+        </div>
+        <div class="summary-lines">
+          <div class="summary-line"><span>Sous-total</span><span>${euro(solo.price)}</span></div>
+          <div class="summary-line"><span>Livraison</span><span><span class="badge-free">Offerte</span></span></div>
+          <div class="summary-line total"><span>Total</span><span>${euro(solo.price)}</span></div>
+        </div>
+        <div class="summary-delivery">
+          <span class="ic">🚚</span>
+          <div><b>Livraison standard</b><br/><span style="font-weight:400;color:var(--ink-2)">Livré en 3 jours — Gratuit</span></div>
+        </div>`;
+        document.getElementById('submitLabel').textContent = `Commander · ${euro(solo.price)}`;
+      } else {
+        card.innerHTML = `<div class="empty-cart"><div class="em">🛒</div>${solo ? solo.empty : 'Produit introuvable'}</div>`;
+        document.getElementById('submitBtn').disabled = true;
+        document.getElementById('submitLabel').textContent = 'Indisponible';
+      }
+    } else if (count) {
+      pack = packFor(count);
+      if (pack) pack = Object.assign({}, pack, { photo: 'images/' + cart.slice().sort((a, b) => b.qty - a.qty)[0].id + '.jpg', title: count > 1 ? `Pack de ${count} squishies` : byId[cart[0].id].name });
+    }
+
+    if (pack && !isSolo) {
+      const sub = cart.reduce((s, i) => s + byId[i.id].price * i.qty, 0);
+      const priceStr = euro(pack.price);
+
+      const items = cart.map(item => {
+        const prod = byId[item.id];
+        const name = esc(prod.name);
+        return `
+        <div class="summary-product">
+          <img class="summary-img" src="images/${prod.id}.jpg" alt="${name}" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'summary-img-placeholder',textContent:'🧸'}))" />
+          <div class="summary-product-info">
+            <div class="summary-product-name">${name}</div>
+            <div class="summary-product-sub">Qté ${item.qty}</div>
+          </div>
+          <div class="summary-product-price">${euro(prod.price * item.qty)}</div>
+        </div>`;
+      }).join('');
+
+      card.innerHTML = `
+        ${items}
+        <div class="summary-lines">
+          <div class="summary-line"><span>Sous-total (${count} ${count > 1 ? 'squishies' : 'squishy'})</span><span>${euro(sub)}</span></div>
+          ${sub > pack.price ? `<div class="summary-line" style="color:#D4006A"><span>Remise pack</span><span>−${euro(sub - pack.price)}</span></div>` : ''}
+          <div class="summary-line"><span>Livraison</span><span><span class="badge-free">Offerte</span></span></div>
+          <div class="summary-line total"><span>Total</span><span>${priceStr}</span></div>
+        </div>
+        <div class="summary-delivery">
+          <span class="ic">🚚</span>
+          <div><b>Livraison standard</b><br/><span style="font-weight:400;color:var(--ink-2)">Livré en 3 jours — Gratuit</span></div>
+        </div>
+      `;
+
+      document.getElementById('submitLabel').textContent = `Commander · ${priceStr}`;
+    } else if (!isSolo) {
+      document.getElementById('submitBtn').disabled = true;
+      document.getElementById('submitLabel').textContent = 'Panier vide';
+    }
+
+    /* Barre « Commander » toujours visible sur téléphone tant que le vrai bouton n'est pas à l'écran */
+    const sticky = document.getElementById('stickyBuy');
+    if (pack && !document.getElementById('submitBtn').disabled) {
+      document.getElementById('sbPrice').textContent = euro(pack.price);
+      const realBtn = document.getElementById('submitBtn');
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(es => es.forEach(en => sticky.classList.toggle('show', !en.isIntersecting && en.boundingClientRect.top > 0))).observe(realBtn);
+      }
+      document.getElementById('sbBtn').addEventListener('click', () => {
+        window.track && window.track('barre_commander_clic', { commande: trackKind });
+        const form = document.getElementById('shipForm');
+        if (form.requestSubmit) form.requestSubmit(); else realBtn.click();
+      });
+    }
+    const zoom = document.getElementById('zoom');
+    card.addEventListener('click', e => {
+      const im = e.target.closest('.summary-img');
+      if (!im) return;
+      zoom.querySelector('img').src = im.src; zoom.querySelector('img').alt = im.alt; zoom.hidden = false;
+      window.track && window.track('photo_zoom_livraison');
+    });
+    zoom.addEventListener('click', () => { zoom.hidden = true; });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') zoom.hidden = true; });
+
+    window.track && window.track('livraison_vue', { commande: trackKind });
+
+    if (typeof PAYMENT_PARTNER === 'string' && PAYMENT_PARTNER) {
+      document.querySelectorAll('[data-partner]').forEach(el => { el.textContent = PAYMENT_PARTNER; });
+      document.getElementById('redirectSub').textContent = `Ta commande est transmise à ${PAYMENT_PARTNER}, notre partenaire de paiement sécurisé. L'adresse de la page va changer : c'est normal.`;
+    }
+
+    /* ── Live validation ── */
+    function setErr(fieldId, msg) {
+      const f = document.getElementById(fieldId);
+      f.classList.add('has-error');
+      if (msg) f.querySelector('.err-msg').textContent = msg;
+    }
+    function clearErr(fieldId) {
+      document.getElementById(fieldId).classList.remove('has-error');
+    }
+
+    ['inp-first','inp-last','inp-email','inp-phone','inp-address','inp-zip','inp-city'].forEach(id => {
+      const inp = document.getElementById(id);
+      if (!inp) return;
+      inp.addEventListener('input', () => {
+        const fid = 'f-' + id.replace('inp-', '');
+        if (inp.value.trim()) clearErr(fid);
+      });
+    });
+
+    /* ── Submit ── */
+    document.getElementById('shipForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      let ok = true;
+
+      const first   = document.getElementById('inp-first').value.trim();
+      const last    = document.getElementById('inp-last').value.trim();
+      const email   = document.getElementById('inp-email').value.trim();
+      const phone   = document.getElementById('inp-phone').value.trim();
+      const prefix  = document.getElementById('inp-prefix').value;
+      const address = document.getElementById('inp-address').value.trim();
+      const zip     = document.getElementById('inp-zip').value.trim();
+      const city    = document.getElementById('inp-city').value.trim();
+      /* Le partenaire de paiement attend le code pays (FR, BE…), pas le nom. */
+      const cSel = document.getElementById('inp-country');
+      const country = (cSel.options[cSel.selectedIndex] && cSel.options[cSel.selectedIndex].dataset.code) || 'FR';
+
+      if (!first)   { setErr('f-first', 'Prénom requis'); ok = false; }
+      if (!last)    { setErr('f-last',  'Nom requis');    ok = false; }
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+        setErr('f-email', 'Email invalide'); ok = false;
+      }
+      if (!phone)   { setErr('f-phone',   'Numéro requis');       ok = false; }
+      if (!address) { setErr('f-address', 'Adresse requise');     ok = false; }
+      if (!zip)     { setErr('f-zip',     'Code postal requis');  ok = false; }
+      if (!city)    { setErr('f-city',    'Ville requise');       ok = false; }
+
+      if (!ok) {
+        const bad = [...document.querySelectorAll('.field.has-error')].map(f => f.id.replace('f-', ''));
+        window.track && window.track('formulaire_erreur', { champs: bad.join(',') });
+        const firstBad = document.querySelector('.field.has-error');
+        if (firstBad) { firstBad.scrollIntoView({ behavior: 'smooth', block: 'center' }); const i = firstBad.querySelector('input'); if (i) i.focus({ preventScroll: true }); }
+        return;
+      }
+
+      /* Build full phone: prefix + number (strip leading 0 if French style) */
+      let num = phone.replace(/\s/g, '');
+      if (num.startsWith('0')) num = num.slice(1);
+      const fullPhone = prefix + num;
+
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true;
+      btn.innerHTML = '<span>⏳</span> <span>Redirection…</span>';
+
+      const p = encodeURIComponent;
+      if (!pack) return;
+      const url = pack.url
+        + '&sub9='  + p(first)
+        + '&sub10=' + p(last)
+        + '&sub11=' + p(email)
+        + '&sub12=' + p(fullPhone)
+        + '&sub13=' + p(address)
+        + '&sub14=' + p(zip)
+        + '&sub15=' + p(city)
+        + '&sub16=' + p(country)
+        + (typeof IMAGE_PARAM === 'string' && IMAGE_PARAM && pack.photo ? '&' + IMAGE_PARAM + '=' + p(SITE_URL + pack.photo) : '')
+        + (typeof TITLE_PARAM === 'string' && TITLE_PARAM && pack.title ? '&' + TITLE_PARAM + '=' + p(pack.title) : '');
+
+      const overlay = document.getElementById('redirect');
+      const link = document.getElementById('redirectLink');
+      link.href = url;
+      overlay.classList.add('show');
+      document.getElementById('stickyBuy').classList.remove('show');
+      window.track && window.track('paiement_redirection', { commande: trackKind, montant: pack.price });
+      setTimeout(() => { window.location.assign(url); }, 1000);
+      setTimeout(() => { link.classList.add('show'); }, 4000);
+    });
+
+    /* Retour arrière depuis la page de paiement : la page revient du cache, on la remet en état */
+    window.addEventListener('pageshow', e => {
+      if (!e.persisted) return;
+      document.getElementById('redirect').classList.remove('show');
+      document.getElementById('redirectLink').classList.remove('show');
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = false;
+      btn.innerHTML = '<span>🔒</span> <span id="submitLabel">Commander · ' + euro(pack ? pack.price : 0) + '</span>';
+      const r = btn.getBoundingClientRect();
+      sticky.classList.toggle('show', !!pack && r.top > innerHeight);
+    });
+  })();
+  </script>
+</body>
+</html>
